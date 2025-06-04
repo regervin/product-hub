@@ -7,7 +7,8 @@ import {
   FiShoppingCart, 
   FiDownload, 
   FiSettings,
-  FiX
+  FiX,
+  FiShield
 } from 'react-icons/fi';
 
 interface SidebarProps {
@@ -23,13 +24,16 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
     { to: '/purchases', icon: <FiShoppingCart />, label: 'Purchases' },
     { to: '/downloads', icon: <FiDownload />, label: 'Downloads' },
     { to: '/settings', icon: <FiSettings />, label: 'Settings' },
+    { to: '/auth-verification', icon: <FiShield />, label: 'Auth Verification' },
   ];
   
   return (
     <div className="h-full flex flex-col">
       {/* Logo and close button (mobile only) */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-border">
-        <div className="text-xl font-bold text-primary">ProductHub</div>
+        <div className="flex items-center">
+          <img src="/logo.svg" alt="MyDigitalShelf Logo" className="h-8 mr-2" />
+        </div>
         {closeSidebar && (
           <button 
             className="lg:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
@@ -64,7 +68,7 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
       {/* Footer */}
       <div className="p-4 border-t border-border">
         <div className="text-xs text-muted-foreground">
-          <p>© 2023 ProductHub</p>
+          <p>© 2023 MyDigitalShelf</p>
           <p>Version 0.1.0</p>
         </div>
       </div>

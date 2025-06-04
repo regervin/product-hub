@@ -1,22 +1,22 @@
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
-import { FiMenu, FiBell, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiBell, FiUser, FiLogOut } from 'react-icons/fi';
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   openSidebar: () => void;
 }
 
 const Navbar = ({ openSidebar }: NavbarProps) => {
-  const { profile, signOut } = useAuth();
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const { user, profile, signOut } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
-  // Close menu when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setUserMenuOpen(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
       }
     }
     
@@ -29,66 +29,58 @@ const Navbar = ({ openSidebar }: NavbarProps) => {
   return (
     <header className="bg-card border-b border-border">
       <div className="flex items-center justify-between h-16 px-4">
-        {/* Left side - Menu button and logo */}
+        {/* Left side - Mobile menu button and Logo */}
         <div className="flex items-center">
           <button
-            type="button"
             className="lg:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
             onClick={openSidebar}
           >
             <FiMenu className="h-6 w-6" />
           </button>
           
-          <div className="hidden lg:block ml-2 text-xl font-bold text-primary">
-            ProductHub
-          </div>
+          {/* Logo - visible on mobile and desktop */}
+          <Link to="/dashboard" className="flex items-center ml-2 lg:ml-0">
+            <img src="/logo.svg" alt="MyDigitalShelf" className="h-8" />
+          </Link>
         </div>
         
         {/* Right side - User menu */}
         <div className="flex items-center space-x-4">
-          <button className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-accent">
+          {/* Notifications */}
+          <button className="p-2 rounded-md text-muted-foreground hover:text-foreground">
             <FiBell className="h-5 w-5" />
           </button>
           
-          <div className="relative" ref={userMenuRef}>
+          {/* User dropdown */}
+          <div className="relative" ref={dropdownRef}>
             <button
               className="flex items-center space-x-2"
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
-                {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'}
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <FiUser className="h-4 w-4" />
               </div>
-              <span className="hidden md:inline-block font-medium">
-                {profile?.full_name || profile?.email || 'User'}
+              <span className="hidden md:block font-medium">
+                {profile?.full_name || user?.email}
               </span>
             </button>
             
-            {userMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 py-2 bg-card rounded-md shadow-lg border border-border z-10">
-                <div className="px-4 py-2 text-sm text-muted-foreground border-b border-border">
-                  Signed in as<br />
-                  <span className="font-medium text-foreground">{profile?.email}</span>
+            {/* Dropdown menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg z-50">
+                <div className="p-3 border-b border-border">
+                  <p className="font-medium">{profile?.full_name}</p>
+                  <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
                 </div>
-                
-                <Link
-                  to="/settings"
-                  className="flex items-center px-4 py-2 text-sm hover:bg-accent"
-                  onClick={() => setUserMenuOpen(false)}
-                >
-                  <FiSettings className="mr-2 h-4 w-4" />
-                  Settings
-                </Link>
-                
-                <button
-                  className="flex w-full items-center px-4 py-2 text-sm hover:bg-accent text-destructive"
-                  onClick={() => {
-                    signOut();
-                    setUserMenuOpen(false);
-                  }}
-                >
-                  <FiLogOut className="mr-2 h-4 w-4" />
-                  Sign out
-                </button>
+                <div className="p-2">
+                  <button
+                    className="w-full flex items-center px-3 py-2 text-sm rounded-md hover:bg-accent text-left"
+                    onClick={() => signOut()}
+                  >
+                    <FiLogOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </button>
+                </div>
               </div>
             )}
           </div>
