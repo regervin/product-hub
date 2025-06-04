@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User, AuthResponse } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types/supabase';
 
@@ -10,14 +10,8 @@ interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{
-    error: Error | null;
-    data: Session | null;
-  }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{
-    error: Error | null;
-    data: Session | null;
-  }>;
+  signIn: (email: string, password: string) => Promise<AuthResponse>;
+  signUp: (email: string, password: string, fullName: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{
     error: Error | null;
@@ -124,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { data, error };
   };
 
-  const value = {
+  const value: AuthContextType = {
     session,
     user,
     profile,

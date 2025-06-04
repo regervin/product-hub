@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
-import { FiUser, FiMail, FiLock, FiSave, FiLogOut } from 'react-icons/fi';
+import { FiUser, FiLock, FiSave, FiLogOut } from 'react-icons/fi';
 
 const Settings = () => {
   const { user, profile, updateProfile, signOut } = useAuth();

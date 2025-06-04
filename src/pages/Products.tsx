@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiEdit2, FiTrash2, FiEye, FiDollarSign, FiDownload, FiToggleLeft, FiToggleRight } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiEye, FiDollarSign, FiToggleLeft, FiToggleRight, FiPackage } from 'react-icons/fi';
 import { Database } from '../types/supabase';
 
 type Product = Database['public']['Tables']['products']['Row'];
